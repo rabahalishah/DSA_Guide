@@ -1,0 +1,1228 @@
+***************DSA: Data structure and algorithms
+Data Structure + Algorithm = Program
+
+"Data Structures are simply used to store data and algorithms are the way to use those data structures to write good programs"
+
+DSA will give you a way to think like a good programmer. A good programmer is one, who choose write data struture and choose right algorithm to wirte a good program which is readable and scalable.
+
+And good developer have this knowledge to choose right data structure and right algorithm. 
+
+
+******************************************************Big O Asymptotic analysis
+
+A good is what which is readable and scalable, Big O allows us to measure the scalablity of a code.
+
+Let say you and your friend ran a below code in their PCs
+
+const large = new Array(100).fill('nemo');
+
+let t0 = performance.now()
+function findNemo(array){
+for (i=0; i<array.length; i++){
+if(array[i]==='nemo;){ console.log('Found Nemo'); }
+}
+let t1 = performance.now()
+}
+
+
+
+console.log(`This function took ${t1-t0} milliseconds`);
+
+findNemo(large);
+
+
+//This function took 334.540802090239 milliseconds
+
+Both will get different time for their execution.What does it means that?
+Do your friend won or you?
+
+The answer is that we cannot decide it in this way. Here comes BigO which tells us about the efficiency of an alogirth. Greater the number of inputs and slower the alogirthm will be. Efficient algorithm do not get slow down rapidly on increasing the number of inputs.
+
+Big O chart:
+
+y-axis: No of operations
+x-axis: No of inputs
+
+Big 0 notation tells us, as the number of inputs are going to increase how many number of operations an algorithm or function have to perform.
+
+** O(n)
+In our nemo function case as the elements in the arrays (inputs) increases same number of operations performed by the function will be increase. So we can say there is a linear relation between no. of inputs and no. of operations. So its notation will be O(n)
+
+***O(1) notation:
+function anyFunction(boxes){
+console.log(boxes[0]);
+}
+
+here in this case no matter how many inputs/values/entries are there in boxes array we always going to have only one operation.
+
+so we can say its graph will be a constant line. Therefore, we call it O(1) constant time;
+
+O(1) notation is an excellent notation as this function is most efficient and never gonna slow on increasig the number of inputs
+
+**********Exercise
+// What is the Big O of the below function? (Hint, you may want to go line by line)
+function funChallenge(input) {
+  let a = 10; // O(1)
+  a = 50 + 3; // O(1)
+
+  for (let i = 0; i < input.length; i++) { // O(n)
+    anotherFunction(); // O(n)
+    let stranger = true; // O(n)
+    a++; // O(n)
+  }
+  return a; // O(1)
+}
+
+O(1) + O(1)+ O(1) + O(n) +O(n) + O(n) + O(n)
+Big O notation of for this function is O(3+4n)
+
+
+// What is the Big O of the below function? (Hint, you may want to go line by line)
+function anotherFunChallenge(input) {
+    let a = 5; // O(1)
+    let b = 10; // O(1)
+    let c = 50; // O(1)
+    for (let i = 0; i < input; i++) { // O(n)
+      let x = i + 1; // O(n)
+      let y = i + 2; // O(n)
+      let z = i + 3; // O(n)
+
+    }
+    for (let j = 0; j < input; j++) { // O(n)
+      let p = j * 2; // O(n)
+      let q = j * 2; // O(n) 
+    }
+    let whoAmI = "I don't know"; // O(1)
+  }
+
+  // Big O = 4 + 7n = O(n)
+
+
+***************Rules to find Big O
+***********Big O cheat sheet
+
+*****BigOs
+O(1) Constant- no loops
+O(log N) Logarithmic- usually searching algorithms have log n if they are sorted (Binary Search)
+O(n) Linear- for loops, while loops through n items
+O(n log(n)) Log Liniear- usually sorting operations
+O(n^2) Quadratic- every element in a collection needs to be compared to ever other element. Two
+nested loops
+O(2^n) Exponential- recursive algorithms that solves a problem of size N
+O(n!) Factorial- you are adding a loop for every element you are inputing. It is most horrible and have steepest BigO graph. As it perform several operation for even a single input.s
+Iterating through half a collection is still O(n)
+Two separate collections: O(a * b)
+
+****-What can cause time in a function?-
+Operations (+, -, *, /)
+Comparisons (<, >, ==)
+Looping (for, while)
+Outside Function call (function())
+*********-Rule Book
+Rule 1: Always worst Case
+Rule 2: Remove Constants
+Rule 3: Different inputs should have different variables. O(a+b). Let say we looping over A and B array but they are not nested. Simply two loops or two functions are running in a single function then the Big(O) for such kind of program would be O(a+b).
+use + for steps in order
+use * for nested steps
+Rule 4: Drop Non-dominant terms
+
+
+******Explanation
+you do not need to calculate Big O to such precision O(3+4n). You can simply write it as O(n)
+
+There are 4 rules that you have to follow:
+1) Worst case: Always take the worst case. Worst case here is that assume how long or how many max as much as operations can be performed by the given function. Function will be given in generic manner. You should try to put bigger input or the way the function will be maximum operate. It is same as testing any thing at peak conditions. e.g finding a word in an array. So keep the word at last in the array so that function iterate over all the entries.
+2) Removing constants: Remove constant values from you answer such as for O(2n) make it O(n) for O(2n+3) make it O(n)
+3) Different terms of inputs: In case of more than one input in a function then their operations will be add such as anyFunction(input1, input2) //output: (n+m). And for nested loops you will have n^2. For three nested loop it will be n^3 and so on.
+4) Drop non dominants: Drop the terms which have not any significant effect on the final answer such as O(n^2+2n+100+n) here n^2 is the most dominant term and will have effect on the number of operations so keep n^2 and delete rest of the terms so final answer: O(n^2)
+
+
+*******************Why we are stuying Big(O)
+"Data Structures are simply used to store data and algorithms are the way to use those data structures to write good programs"
+
+DSA will give you a way to think like a good programmer. A good programmer is one, who choose write data struture and choose right algorithm to wirte a good program which is readable and scalable.
+
+And good developer have this knowledge to choose right data structure and right algorithm. 
+
+Big(O) notation will help you to find the efficiency of your program. Whether it is scalable or not. In big companies, inputs are huge so we have to focus on number of operations in a program.
+
+There are two factors of scalabilty. One is speed (time complexity: How fast and scalable our code is) and other is memory (Space complexity: How much space it is carrying in the memory?)
+
+lets discuss each in detail
+
+****************Space complexity
+When a program executes there are two ways to remember things. One is heap (where variables are stores) and stack (where we keep track of our function calls). Sometimes we want to use less memory instead of using less time and sometimes we want to use less time instead of less memory. Each thing comes at some cost. We have to compromise on one another.
+
+************What causes Space complexity?
+Variables
+Data Structures
+Function Call
+Allocations
+
+**************How Big(O) and space complexity are related?
+Lets understand this with an example:
+Let say you have an array:
+
+const Tweet_array = [
+{tweet: 'hi', date: 2013},
+{tweet: 'hello', date: 2017},
+{tweet: 'teddy', date: 2024},
+]
+
+Your job is to compare each tweet with each date of all elements in an array.
+
+Here you can have an idea that you will create a function that will contain nested loop and we know that for nested loop BigO is O(n^2)
+
+And we all know according to BigO notation analysis chart we O(n^2) comes under a dangrous domain. So here we can use our space complexity like we can create some variables, data structures, function calls or allocation to reduce the Big O notation for this task. Here we are doing trading. We are using space to increase our program fast and efficient. 
+variables, data structures, functions calls and allocations can help us to make such an efficient program such that its BigO is either time constant or O(n) which lies in good range.
+
+*******One more important thing
+> '434345323289hfuhc4389hf'.length
+
+what is the BigO of above program?
+the answer to this above program can vary accoding to your language. Different languages can have different programs written to calculate length of an array. Their BigO can vary according to that.
+
+*****************
+
+Always remember, good programmer is one who keeps the balance between scalability, readability and speed. Some times you have to compromise on readability to optimize speed. make sure to have balance between them. 
+
+Managing time and space complexity using Big(O) can save a lot of money and time.
+
+************************How to solve coding problems
+
+The 3 pillars of good code:
+1. Readable
+2. Time Complexity
+3. Space Complexity
+
+What skills interviewer is looking for:
+Analytic Skills - How can you think through problems and analyze things?
+Coding Skills - Do you code well, by writing clean, simple, organized, readable code?
+Technical knowledge - Do you know the fundamentals of the job you're applying for?
+Communication skills: Does your personality match the companies’ culture?
+
+
+**IMPORTANT**: Whenever an interviewer asks you a question, never ever jump to the solution directly. First of all understand the question. each and every aspect of a question. First solution came into your mind is not always be a good solution. You can tell them that this can be done in that way but thats not the efficent solution as its Big O is not linear or contant and blah blah. then think loudly in front the interviewer. let him know about your thought process. And once you made all logic and stuff then start do coding. One you write the code. Start testing it first with the given inputs and then also test is for edge cases such as what if the input becomes empty or what if the input becomes too large and so on.
+prove him that you have analytical skills by analysing the problem, prove him you have coding skills by writing clean, readable, scalable and efficient code, prove him you have technical knowledge by assuming hardware related or company related information. Explain your solution and prove your communication.
+*********
+
+Step By Step through a problem:
+1. When the interviewer says the question, write down the key points at the top (i.e. sorted array). Make sure you have all the details. Show how organized you are.
+2. Make sure you double check: What are the inputs? What are the outputs?
+3. What is the most important value of the problem? Do you have time, and space and memory, etc.. What is the main goal?
+4. Don't be annoying and ask too many questions.
+5. Start with the naive/brute-force (here native/brute-force attack means that the easiest solution but not efficient. It is usually the one which come into your mind at first sight) approach. First thing that comes into mind. It shows that you’re able to think well and critically (you don't need to write this code, just speak about it).
+6. Tell them why this approach is not the best (i.e. O(n^2) or higher, not readable, etc...)
+7. Walk through your approach, comment things and see where you may be able to break things. Any repetition, bottlenecks like O(N^2), or unnecessary work? Did you use all the information the interviewer gave you? Bottleneck is the part of the code with the biggest Big O. Focus on that. Sometimes this occurs with repeated work as well.
+8. Before you start coding, walk through your code and write down the steps you are going to follow.
+9. Modularize your code from the very beginning. Break up your code into beautiful small pieces and add just comments if you need to.
+10. Start actually writing your code now. Keep in mind that the more you prepare and understand what you need to code, the better the whiteboard will go. So never start a whiteboard interview not being sure of how things are going to work out. That is a recipe for disaster. Keep in mind: A lot of interviews ask questions that you won’t be able to fully answer on time. So think: What can I show in order to show that I can do this and I am better than other coders. Break things up in Functions (if you can’t remember a method, just make up a function and you will at least have it there. Write something, and start with the easy part.
+11. Think about error checks and how you can break this code. Never make assumptions about the input. Assume people are trying to break your code and that Darth Vader is using your function. How will you safeguard it? Always check for false inputs that you don’t want. Here is a trick: Comment in the code, the checks that you want to do… write the function, then tell the interviewer that you would write tests now to make your function fail (but you won't need to actually write the tests).
+12. Don’t use bad/confusing names like i and j. Write code that reads well.
+13. Test your code: Check for no params, 0, undefined, null, massive arrays, async code, etc… Ask the interviewer if we can make assumption about the code. Can you make the answer return an error? Poke holes into your solution. Are you repeating yourself?
+14. Finally talk to the interviewer where you would improve the code. Does it work? Are there different approaches? Is it readable? What would you google to improve? How can performance be improved? Possibly: Ask the interviewer what was the most interesting solution you have seen to this problem
+15. If your interviewer is happy with the solution, the interview usually ends here. It is also common that the interviewer asks you extension questions, such as how you would handle the
+problem if the whole input is too large to fit into memory, or if the input arrives as a stream. This is a common follow-up question at Google, where they care a lot about scale. The answer is usually a divide-and-conquer approach — perform distributed processing of the data and only read certain chunks of the input from disk into memory, write the output back to disk and combine them later
+
+
+****************Data Structures
+Data strutures are organised collection of values. You can think Data Structures are like storages such as school bag, fridge, box, drawer. Each thing has its own purpose. Like school bag is for books, fridge is for food, drawer is for clothes etc.
+I practical life we human do the same, we organised unordered data into ordered data and store it somewhere to use them. There are tons of data structures in computer's world. 
+
+******How computer stores Data?
+we all know Computer consists on a CPU, RAM, and storage device.
+
+CPU access the RAM.
+When we create variable such as var a = 7 then it stores in the RAM in the form of 0s and 1s. As RAM have direct access to each address of the objects or variables stores in the RAM.
+
+each integer is represented by 8 bits in RAM if your system is of 8bits. And 8bits are combined to form a byte.
+
+8 bit
+16
+32
+64
+more the bits of your system are, more you are going store a lot of information.
+
+The reason by Data structures are important cause they effect space complexity in memory. When you will console a number such as 5^1000 you will get infinity. As There is a certain threshhold of a data struture to store a variable. If the size of the variable exceeds the threshold of then it will show infinity. So the choice of right data structure is important.
+
+*******Data Structures:
+Arrays
+Trees
+Stacks
+Queues
+Linked List
+Trees
+Tries
+Graph 
+Hash tables
+
+********Algorithms
+Sorting
+Dynamic Programming
+BFS + DFS (For searching)
+Recursion
+
+**NOTE**: Each language has its own data types, data structures are used to store those data types. 
+
+************Operations of Data Structures
+There are some operations that we are going to perform on our data structures
+Each data structure has its pros and cons while performing the following operations: (and we know pros and cons will be on the basis of Big O notation)
+
+1) Insertion (adding data into data structures)
+2) Deletion (deleting data from memory)
+3) Access (accessing the data from memory)
+4) Traversal (Accessing each item exactly once)
+5) Searching (Searching a matching word)
+6) Sorting (organizing data in ascending or descending order)
+
+Some data structures are shows accepateble big O over performing above operations and some Data structures shows bad.
+Your job is to choose the right Data Structure for your operation and algorithm.
+
+
+*************Arrays
+Arrays are most used data struture and simply used to store data sequentially. Arrays have some pros and cons.
+1) lookup (accessing data) O(1)
+2) push (adding data at the end) O(1)
+3) Insert (inserting data at start or inbetween) O(n)
+4) Delete (Deleting data from start or in between) O(n)
+5) searching O(n)
+
+*********Arrays in JS
+const myArr = ['a','b','c','d'];
+// here if 'a' is carrying 4 bytes in the memory then myArray will carry 4*5=20 bytes of space in memory.
+
+myArr[2] //O(1) Accessing data using arrays is very fast no matter how long the array is. Our computer exactly knows where it is.
+
+myArr.push('e') //O(1) adding items are the end of array is very fast as we know we dont have to loop over the array
+
+myArr.pop() // O(1) removes last item
+
+myArr.unshift('x') // O(n) this methods add item at the start of an array the reason why its time complexity is O(n) cuz after adding element at the start we have to assign new indexes to 		      the whole array
+myArr.splice(2, 0, 'alien') // O(n) Splice can be used to delete and add data anywhere in the array. Since again we are adding in between. so we have to reassign the new indexes to the 			      whole array element by looping over it.
+
+************Types of Arrays
+there are two types of arrays:
+1) Static : In static arrays we define the fixed size of an array before creating it. Means we are allocating a fixed space in the memory in advance. In languages like C++ we create static  	    arrays like this > int arr[4] {1,2,3,4}; here we can manage memory at low level. But in higher lvl languages like python and JS we do not need to worry about memory management 	    as JS and python deals with dynamic arrays.
+2) Dynamic : Dynamic arrays are the one who do not have fixed space. They manage their size according to the number of elements in them.
+
+// there are some cases where you have to manually manage the memory but there are some cases where you dont.
+
+
+**************Implementing/creating Arrays from scratch
+We can create our own data strutures and their customs methods.
+In JS we will be using Objects/classes to create such data strutures
+
+
+class MyArray {
+
+    constructor() {
+        this.length = 0;
+        this.data = {};
+    }
+
+    get(index) {
+        return this.data[index];
+    }
+
+    push(item) {
+        this.data[this.length] = item;
+        this.length++;
+
+        return this.length;
+    }
+
+    pop() {
+        const lastItem = this.data[this.length - 1];
+
+        delete this.data[this.length - 1];
+        this.length--;
+
+        return lastItem;
+    }
+
+    delete(index) {
+        const item = this.data[index];
+
+        this.shiftItems(index);
+
+        return item;
+    }
+
+    shiftItems(index) {
+        for (let i = index; i < this.length; i++) {
+            this.data[i] = this.data[i + 1];
+        }
+
+        delete this.data[this.length - 1];
+        this.length--;
+    }
+}
+
+const newArray = new MyArray();
+
+newArray.push("hi");
+newArray.push("you");
+newArray.push("!");
+
+newArray.pop();
+
+newArray.delete(1);
+
+console.log(newArray);
+
+
+// custom insert method
+
+class myArray {
+  constructor() {
+    this.array = [];
+    this.length = 0;
+  }
+  append(value) {
+    this.array.push(value);
+    this.length++;
+    // console.log(this.array);
+    return this;
+  }
+  insert(index, value) {
+    if (index < 0 || index > this.length) {
+      this.array.append(value);
+      console.log(this.array);
+      return this.array;
+    }
+
+    for (let i = this.length; i > index; i--) {
+      //shifting elements to one step ahead to their index to create empty space of this coming value
+      this.array[i] = this.array[i - 1];
+    }
+    this.array[index] = value;
+    this.length++;
+    console.log(this.array);
+
+    return this.array;
+  }
+}
+
+const arr = new myArray();
+
+arr.append(5);
+arr.append(4);
+arr.append(6);
+arr.append(8);
+arr.insert(2, 99);
+
+
+**********Reversing an array
+const arr = [1, 2, 3, 4, 5];
+function reverse(arr) {
+  let revArr = [];
+
+  for (i = arr.length-1; i >= 0; i--) {
+    revArr.push(arr[i]);
+  }
+  console.log(revArr);
+  return revArr;
+}
+
+reverse(arr);
+
+**********************Strings vs Arrays
+*************************Strings questions
+whenever you got questions related to strings then treat them like an array. Cause at the end of the day strings are also an array.
+First covert strings into array using some operations then solve your question what the interviewer has asked.
+
+**JS Recall: 
+The split() method splits a string into an array of substrings.
+
+The split() method returns the new array.
+
+The split() method does not change the original string.
+
+If (" ") is used as separator, the string is split between words.
+
+***Example:
+const str = 'The quick brown fox jumps over the lazy dog.';
+
+const words = str.split(' ');
+console.log(words);
+// Expected output:  ["The", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog."]
+
+const chars = str.split('');
+console.log(chars);
+// Expected output: ["T", "h", "e", " ", "q", "u", "i", "c", "k", " ", "b", "r", "o", "w", "n", " ", "f", "o", "x", " ", "j", "u", "m", "p", "s", " ", "o", "v", "e", "r", " ", "t", "h", "e", " ", "l", "a", "z", "y", " ", "d", "o", "g", "."]
+
+const strCopy = str.split();
+console.log(strCopy);
+// Expected output: Array ["The quick brown fox jumps over the lazy dog."]
+
+**********
+**********Reversing a string
+
+// const str = 'Hi my name is Andrie';
+
+//using builtin method
+// function reverse(str) {
+//   const char = str.split('');
+//   const reversedArr = char.reverse();
+//   const final = reversedArr.join(' ');
+//   console.log(final);
+// }
+
+// reverse(str);
+
+//creating from scratch
+// function reverse(str) {
+//   const reversedArr = [];
+//   const totalItems = str.length - 1;
+
+//   for (i = totalItems; i >= 0; i--) {
+//     reversedArr.push(str[i]);
+//   }
+//   const final = reversedArr.join('');
+//   console.log(final);
+// }
+
+// reverse(str);
+
+****************Hash Functions
+These are the functions which generates are 16 digit code on even entering a single value.
+No matter we enter same string every time we always get the same output code.
+
+Entering same string and getting the same code corresponding to the input is called idempotent.
+Hash functions are really fast therefore their BigO is counted as O(1)
+
+Similarly we have a data structure called Hash Tables or Objects in JS
+Why we discussed hash functions first?
+
+The reason is to make logic. Hash functions generate random keys. Same as Hash table stores its items in the  memory randomly. There is no sequential order. 
+
+In hash tables /Objects we can have collisions of data. Means that on inserting data in the Obj/hash tables two items get placed at the same address. So how we will solve this issue with Hash tables/objects? To solve collision issue we have another data structure called linked list. There are some other solutions are there too.
+
+
+There are two other types called Maps and Sets
+The difference between Maps and hash tables (objs) is that in maps data is sequentially stores and any data type can be the key. Where as in Hash tables (Obj) only strings can become keys. 
+
+In sets we can only stores keys.
+
+
+NOTE: In Hash tables 
+Insert O(1)
+lookup O(1)
+update O(1)
+delete O(1)
+
+but collision of data in hash tables makes it slower.
+
+*******************Implementing/creating Hash tables (Objects) from scratch
+
+class HashTable {
+  constructor(size) {
+    this.data = new Array(size);
+  }
+
+  _hash(key) {
+    let hash = 0;
+    for (let i = 0; i < key.length; i++) {
+      hash = (hash + key.charCodeAt(i) * i) % this.data.length;
+    }
+    return hash;
+  }
+
+  set(key, value) {
+    const address = this._hash(key);
+    if (!this.data[address]) {
+      this.data[address] = [];
+    }
+    this.data[address].push([key, value]);
+    return this.data;
+  }
+
+  get(key) {
+    const address = this._hash(key);
+    const currentBucket = this.data[address];
+    if (currentBucket) {
+      for (const i = 0; i < currentBucket.length; i++) {
+        if (currentBucket[i][0] === key) {
+          return currentBucket[i][0];
+        }
+      }
+    }
+  }
+
+  keys() {
+    const keysArray = [];
+    for (let i = 0; i < this.data.length; i++) {
+      if (this.data[i]) {
+        keysArray.push(this.data[i][0][0]);
+      }
+    }
+    console.log(keysArray);
+    return keysArray;
+  }
+}
+
+const myHashTable = new HashTable(50);
+myHashTable.set('grapes', 10000);
+myHashTable.set('oranges', 873);
+myHashTable.set('bananas', 10000);
+myHashTable.set('apples', 9);
+myHashTable.get('grapes');
+myHashTable.get('apples');
+myHashTable.keys();
+
+//here get, set, and Hash function all have O(1) despite having loops in them in case of collision O(n)
+
+
+//again here we are creating a data struture which works as Hash tables like when it stores things it assign some random address which we are doing using hash functions and then using hash functions address we are using accessing it. WE have created set and get methods for our Object/hash table.
+
+
+**NOTE:** Why we created Hash tables and arrays from scratch? The answer is that we did this all so that we could have an idea how things work behind the scenes. Here we learned how to create data structures from scratch using Classes in JS and then their methods which we apply on them.
+
+
+// prevention of Hash/ Object collision (more than one element of the hash table have same memory address)
+
+ keys() {
+    if (!this.data.length) {
+      return undefined
+    }
+    let result = []
+    // loop through all the elements
+    for (let i = 0; i < this.data.length; i++) {
+        // if it's not an empty memory cell
+        if (this.data[i] && this.data[i].length) {
+          // but also loop through all the potential collisions
+          if (this.data.length > 1) {
+            for (let j = 0; j < this.data[i].length; j++) {
+              result.push(this.data[i][j][0])
+            }
+          } else {
+            result.push(this.data[i][0])
+          } 
+        }
+    }
+    return result; 
+  }
+
+***********************Arrays Vs Hash Tables (Obj)
+**Arrays:
+Search O(n)
+lookup O(1)
+push   O(1)
+insert O(n) (inserting element at any random point except starting and ending of an array)
+delete O(n) (deleting element from any random point except starting and ending of an array)
+
+Hash Tables (Objects)
+Search O(1)
+lookup O(1)
+insert O(1) 
+delete O(1) 
+(In hash tables/obj we can store data anywhere in the memory. therefore we do not have any sequential indexes which makes its inertion and deletion O(1))
+
+The reason why Hash Tables are fast is due to their non-sequential order of storing elements. Instead of Arrays where every thing is ordered so we have to assign indexes. In Hash Tables this is not the thing.
+
+Hash tables are used to optimize the programs as in the below example we have reduced our O(n^2) to O(n). But here we compromised over space complexity. In hash tables we have to compromise on space complexity but time complexity can be improve.
+
+// Method 1 having big O(n^2)
+// function firstRecurringCharacter(input) {
+//   for (let i = 0; i < input.length; i++) {
+//     for (let j = i + 1; j < input.length; j++) {
+//       if (input[i] === input[j]) {
+//         return input[i];
+//       }
+//     }
+//   }
+//   return undefined;
+// }
+
+// // Method 2 having big O(n)
+// function firstRecurringCharacter2(input) {
+//   let map = {};
+//   for (let i = 0; i < input.length; i++) {
+//     if (map[input[i]] !== undefined) {
+//       return input[i];
+//     } else {
+//       map[input[i]] = i;
+//     }
+//   }
+//   return undefined;
+// }
+
+// firstRecurringCharacter2([1, 5, 5, 1, 3, 4, 6]);
+
+
+
+Hash Tables pros and cons
+
+**pros:
+really fast lookups
+fast inserts
+flexible keys
+
+**cons:
+unordered
+slow key iteration
+
+***********************Linked Lists
+We have seen problems with arrays as in case of static we had fixed space. Then We used dynamic arrays. But dynamic arrays we not efficient for deleting and inserting data. Then we used Hash tables which stores data anywhere in the memory which makes our deletion and insertion easy. But hash tables had  collision of data problem (multiple elements having same address in the memory) To solve these issues we will use our third data structure which is called Linked List. So what does that means linked list is the best data sturture and we always have to used linked list instead of using arrays and hash tables? NO, we all know Data structures comes with a trade off. (trade off means we have to compromise on one in order to achieve other).
+
+
+What is a linked list?
+Linked list is a data structure which contains two values. One which our actual data of any type and other the pointer pointing toward the next node.
+In linked list we have nodes. One node is pointing toward the other node.
+Example of a linked list
+
+apples
+5678 ----> grapes
+	   91011 ---->bananas
+ 		      121314 ----> null
+
+In linked list we have head node and a tail node. Tail node the one whos pointer points towards the null (as its the end of the list and there is no further nodes)
+In Javascript we do not have pre-built linked list data struture. We have to build it. In languages like Java and C we have pre-built linked lists.
+
+
+***********Big Os of Linked list
+prepend O(1) (adding item at the beginning of an array)
+append O(1) (adding item at the end of an array)
+lookup O(n) (For linked list we have to use loop to lookup/get a specific item)
+insert O(n) (For insert we have to use loop to get the element behind the index where we want to insert out element)
+delete O(n) 
+
+In Linked list we again have to loop over the whole array to search a specific element.
+In case of inserting we have to change the pointers and same case of deletion.
+
+*****************What is a pointer
+Pointers are simply references that are just pointing toward some value or data type.
+In JS we also create pointers. (We do not have pre-built pointers but it happens behind the scenes in JS)
+For example:
+
+const obj1 = {a:true};
+const obj2 = obj1;
+
+here obj2 is a pointer which is pointing toward obj1.
+
+In memory there is only 1 "{a:true}" and both obj1 and obj2 are pointing towards the same data in memory.
+
+If we modify obj1 then obj2 will be modified cuz actually there is only one object in the memory other is the pointer.
+If we do something like this
+
+let obj1 = {a:true};
+let obj2 = obj1;
+
+delete obj1;
+obj2 = "myString";
+
+console.log(obj2)
+
+//output: "myString"
+
+here now obj2 will have this data "myString". As Obj1 was deleted but its data {a:true} was still there as Obj2 was a pointer and pointing towards the {a:true}. But later on we assigned obj2 this data "myString" so this data --> {a:true}will be deleted automatically from the memory as now no one is pointing toward it. Therefore we say, In JS we have
+
+
+*****************Implementing LinkedList alomg with its methods
+Example of how a linkedList looks like:
+{value: 10, 
+ next: {
+	value:50
+	next: {
+		value: 60
+		next: null
+		}		
+}
+}
+
+
+******Coding: Linked List
+class node {
+  constructor(value) {
+    (this.value = value), (this.next = null);
+  }
+}
+
+class linkedList {
+  constructor(value) {
+    this.head = {
+      value: value,
+      next: null,
+    };
+    this.tail = this.head;
+    this.length = 1;
+  }
+  append(value) {
+    const newNode = new node(value);
+    this.tail.next = newNode;
+    this.tail = newNode;
+    this.length++;
+    console.log(this);
+  }
+
+  prepend(value) {
+    const newNode = new node(value);
+    newNode.next = this.head;
+    this.head = newNode;
+    this.length++;
+    console.log(this);
+  }
+
+  printList() {
+    const arr = [];
+    let currentNode = this.head;
+    while (currentNode !== null) {
+      arr.push(currentNode.value);
+      currentNode = currentNode.next;
+    }
+    console.log(arr);
+  }
+
+  insert(index, value) {
+    if (index >= this.length) {
+      return this.append(value);
+    }
+    const newNode = new node(value);
+
+    //grabbing the entry which is one step behind the giving index
+    const leader = this.grabLeaderWithItsPointer(index - 1);
+    //holding "next/pointer" object of the leader entry
+    const holdingPointer = leader.next;
+    //setting "next/pointer" of the leader entry to point to the new coming node
+    leader.next = newNode;
+    //pointing the next of the new coming node to the holding pointer which contains the rest of the linked list
+    newNode.next = holdingPointer;
+    //incrementing the length
+    this.length++;
+
+    console.log(this);
+
+    return this;
+  }
+  grabLeaderWithItsPointer(index) {
+    let counter = 0;
+    const currentNode = this.head;
+    while (counter !== index) {
+      currentNode = currentNode.next; //using this we are going deeper and deeper in the list
+      counter++;
+    }
+    return currentNode;
+  }
+
+  remove(index) {
+    if (index >= this.length) {
+      return this.append(value);
+    }
+    const leader = this.grabLeaderWithItsPointer(index - 1);
+    const targetNode = leader.next; //targetNode is a node which we want to delete
+    //here below we are pointing our leader pointer to the node which is next to the targetNode
+    leader.next = targetNode.next;
+    this.length--;
+
+    return this;
+  }
+}
+
+const myLinkedList = new linkedList(10);
+myLinkedList.append(5);
+myLinkedList.prepend(1);
+myLinkedList.insert(1, 99);
+myLinkedList.remove(1);
+myLinkedList.printList();
+
+
+***************Doubly Linked list
+Doubly linked lists are exactly same as singly linked list but the difference is that we have additional pointer which points towards the previous list. This way now we can have reference from end to the start of the list.
+
+
+Big Os of Doubly linked list
+prepend O(1) (adding item at the beginning of an array)
+append O(1) (adding item at the end of an array)
+lookup O(n) (For linked list we have to use loop to lookup/get a specific item) (technically its O(n/2))
+insert O(n) (For insert we have to use loop to get the element behind the index where we want to insert out element)
+delete O(n) 
+
+
+
+****************Singly Linked list vs Doubly Linked list
+Both have their own pros and cos
+Both are fast in terms of time complexity
+But singly lists are good for space complexity as they carry less space whereas Doubly list carries some additional pointer so they carry some more space.
+
+Doubly list can be iterate in the reverse direction as it has pointer referencing to the previous object. So providing some more flexibility to perform operations.
+Both are good for prepends, appends.
+
+
+
+
+************Reversing linked list
+//rest of the code...
+reverse() {
+    if (!this.head.next) {
+      return this.head;
+    }
+
+    let first = this.head; //grabbing the first item
+    this.tail = this.head; //swapping the firt and last
+    let second = first.next; //grabbing the second item
+    //below we are swapping the pointers
+    while (second) {
+      const temp = second.next; //here second.next is the 3rd item
+      second.next = first; //replacing 4th (last in this case) with the 1st item
+      first = second;
+      second = temp;
+    }
+    this.head.next = null;
+    this.head = first;
+    return this.printList();
+  }
+}
+
+//rest of the code...
+
+
+
+**************Linked list pros and cons
+**Pros
+Fast Insertion
+Fast Deletion
+Ordered
+Flexible size
+
+**cons:
+Slow lookup (as we have to go deep and deep inside the nested list)
+More memory (due to pointers they carry more space)
+
+
+************Stacks and Queues
+
+**Stacks:
+Stacks are the data structures which are very powerful and only allow few operations. These are the data strutures which are made on the top of low level data strutures.
+
+You can think stacks like a stack of plates you cannot access the last plate. To reach there you have to go step by step through each plate.
+
+Imagine stack as you are putting blocks in a box. (Push operation)
+And when you take out he blocks the block which was put most recent would be on the top and you will take that first out (pop operation)
+There are few operations that are as follow:
+Lookup() O(n)
+pop() O(1)
+push() O(1)
+peek() O(1)
+
+It works on the principle of FILO means "First in last out".
+There are many application and features which are build on the FILO architecture. For example, undo feature in which we stores our previous operations in the memory and can be access by undo operation and same case for our browser history and swithcing of tabs are done by using the concept of stacks.
+
+
+**Queues:
+Queues are the data structure same as stacks but the difference is that they works on FIFO (First In First Out) architechture instead of FILO.
+Its application are in riding booking app such as Uber. The one who requested first will be give a priority. 
+
+Imagin queue as hollow pipe and you are inserting balls in the hollow pipe which is opened at the both ends. (push/enqueue operation)
+Now the ball which entered into the pipe first will get out of the other hand first and then so on. (pop/dequeue operation)
+
+Lookup O(n)
+enqueue O(1) (push)
+dequeue O(1) (pop but here pop deletes the first person not last)
+peek O(1)
+
+
+
+****************Implementing Stack and queues in JS
+Since we know that JS dont come with a built in stack and queue methods. We have to build them. In JS we can do either with arrays or linkedlist.
+
+Which one should we use to build arrays? or linkedlist?
+
+since we know that in case of Array elements are next to each other in the memory. But memory in case of arrays is limited. And we all know in case of adding or removing element at the start of the array is a big O(n) operation like we have to shift their indexes as well.
+
+Where as in case of linked list every element is scattered or can be anywhere in the memory they are linked with a pointer. Which took some extra space but we can add as many elements in linked list as we want. 
+
+Linked list offers a very fast operation for insertion as all we have to do is simply just to change the head and tail rest will be done automatically. Since Linked list offer O(1) insertion operation therefore we will go with this.
+
+To understand Stack lets understand how JS works behind the scenes:
+
+*************How JS works
+
+We have 4 things in javascript run time environment
+
+memory heap: the place where we allocate the memory to all our variables and Data structures that we have created or our program use.
+call stack:  this is a place where our code get runs step by step as each line is a thread in JS and each line get executed as a stack 
+web API: This is a place we asynchronous code get deal with.
+call back queue: This place deals with the callback functions
+Event loop: This event loop keep checking the call stack that is there any process in call stack if no, then it run call back there.
+
+Example:
+console.log('1')
+setTimeOut(()=>{console.log('2')}, 2000}
+console.log('3')
+
+
+// output 1, 3, 2
+
+setTimeOut is a web API task therefore it will be moved to Web API then Callback and then event loop and then to call stack after 2000 mili seconds. This is how asynchronous JS code works. This is how JS is a single thread non blocking language.
+
+Multi-thread languages are no doubt very efficient but they can cause some issues like Dead-lock
+
+
+Example 2:
+console.log('1')
+setTimeOut(()=>{console.log('2')}, 0}
+console.log('3')
+
+
+// output 1, 3, 2
+
+// NO matter your time is 0 in setTimeOut JS will still pass setTimeOut code through web API --> Callback --> event loop. Therefore it will get printed after other thread executed during that time. 
+
+
+// ******************Implementing stack data structure using linked list
+
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.next = null;
+  }
+}
+
+class stack {
+  constructor() {
+    this.top = null;
+    this.bottom = null;
+    this.length = 0;
+  }
+  peek() {
+    return this.top;
+  }
+  push(value) {
+    const newNode = new Node(value);
+    if (this.length === 0) {
+      this.top = newNode;
+      this.bottom = newNode;
+    } else {
+      const holdingPointer = this.top;
+      this.top = newNode;
+      this.top.next = holdingPointer;
+    }
+    this.length++;
+    console.log(this);
+    return this;
+  }
+  pop() {
+    if (!this.top) {
+      return null;
+    }
+    if (this.top === this.bottom) {
+      this.bottom = null;
+    }
+    this.top = this.top.next;
+    this.length--;
+    console.log(this);
+    return this;
+  }
+}
+
+const myStack = new stack();
+
+myStack.push('google');
+myStack.push('udemy');
+myStack.push('youtube');
+myStack.peek();
+myStack.pop();
+myStack.pop();
+
+
+
+// ******************Implementing stack data structure using arrays
+
+class stack {
+  constructor() {
+    this.array = [];
+  }
+  peek() {
+    return this.array[this.array.length - 1];
+  }
+  push(value) {
+    this.array.push(value);
+
+    console.log(this);
+
+    return this;
+  }
+  pop() {
+    this.array.pop();
+
+    console.log(this);
+
+    return this;
+  }
+}
+
+const myStack = new stack();
+
+myStack.peek();
+myStack.push('google');
+myStack.push('udemy');
+myStack.push('youtube');
+myStack.peek();
+myStack.pop();
+myStack.pop();
+myStack.pop();
+
+// ******************Implementing Queue using stacks (and we will build stacks using arrays)
+
+class queue {
+  constructor() {
+    this.first = [];
+    this.last = [];
+    this.length = 0;
+  }
+  peek() {
+    if (this.first.length > 0) {
+      return this.first[this.first.length - 1];
+    }
+    return this.last[0];
+  }
+  enqueue(value) {
+    const length = this.first.length;
+    for (let i = 0; i < length; i++) {
+      this.last.push(this.first.pop());
+    }
+    this.last.push(value);
+    console.log(this);
+    return this;
+  }
+  dequeue() {
+    
+    const length = this.first.length;
+    for (let i = 0; i < length; i++) {
+      this.first.push(this.last.pop());
+    }
+    this.first.pop(value);
+    console.log(this);
+    return this;
+  }
+}
+
+const myQueue = new queue();
+
+myQueue.peek();
+myQueue.enqueue('google');
+myQueue.enqueue('udemy');
+myQueue.enqueue('youtube');
+myQueue.dequeue();
+myQueue.dequeue();
+
+
+********Pros and cons of Stacks and queues
+**Pros:
+Fast seek operation
+fast push and pop
+
+**Cons:
+slower lookups (or search operation)
+
+**NOTE: We do not get all the items in the stack or queue. We are just access to the first or last and since they are built on the top of lower level data structure such as linkedlist so their elements are connected to each other.
+
+
+*****************Trees
+Trees are also a very powerful data structure. You might have heard about AST (Abstract Syntax Tree).
+These are the trees which our machine break down to take decision. Lets have a look below about a tree. Here you can see there is only a single root and then it is spreading like a tree.
+
+	    1 
+	   / \
+	  4   3	
+	 / \
+	6   4
+
+There are so many trees out there. We will learn about those only which will be used 90% of the time. 
+
+***********Binary Trees
+As we all know binary means 2. So in binary trees we can only have either 0 1 or 2 nodes with a parent node.
+There won't be a case where there are more than 2 nodes are coming from one parent node. Example of binar tree is given below:
+
+	     1 
+	   /    \
+	  4      3	
+	 / \    /  \
+	6   4  5    7
+
+This kind of Binary tree is called as PERFECT BINARY TREE.
+perfect binary trees are the efficient one and there number of nodes are getting double when we move each step down.
+And the nodes at the bottom are equals to all nodes above + 1. By using this mathematical relation we can do something for the efficiency of the array.
+
+	     1 
+	   /    \
+	  4      3	
+	 / \    
+	6   4      
+	   / \
+	  8   9
+
+Such kind of binary trees are called FULL BINARY TREE.
+
+In Binary trees we have three parameters:
+
+value
+left node
+right node
+
+**********Big O of Balanced Binary Search Tree
+lookup O(log N)
+insert O(log N)
+delete O(log N)
+
+Lets understand what is Log N in this binary search tree.
+Remember O(Log N) is better and more efficient than O(n).
+
+How can we calculate number of nodes at each level of our tree?
+
+level 0 : 2^0 = 1 node
+level 1 : 2^1 = 2 nodes
+level 2 : 2^2 = 4
+level 3 : 2^3 = 8
+level 4 : 2^4 = 16
+
+How to calulate total nodes?
+
+Total number of nodes in perfectly binary tree = 2^h-1
+
+where h = height of binary tree and h is also Log N
+
+log 100 = 2 (cuz 10^2=100, so log 10^2=> 2log10 => 2(1) => 2)
+
+************Binary Search trees
+Binary Search trees are the subset of binary trees. Binary search trees allows us to efficeintly search the data which we are looking for. 
+But dont hash maps/tables/Obj were providing us the same benefit? Like we just simply have to pass a key and it will return us a value. But we have to remember that Hash maps/tables/obj do not have relation in between they do not persist relations. On the other hand Binary Search trees provide us the relation and efficient search of Bigo(Log N)
+****RUles for binary Search trees
+1) Whem we move right down side of the tree. The node number will increase. And if we move left down of the tree the number will decrease.
+2) Each not cannot have more than two nodes in Binary search tree as its name suggest Binary means 2.
+
+These two rules will help us to perform Insert, delete and search operations on Binary search trees.
+When we insert an element in a BST it first look for the right place for that coming number according to rule number 1 and then place it there.
+
+we have discussed the above the pros of binary trees. Let discuss some cons of it.
+
+The problem that we can may face is that our binary tree can be unbalanced int this way in adapt a shape of linked list of array where we have to loop over to access the desired item.
+
+***In case of unbalaned tree our Big O will be
+lookup O(n)
+insert O(n)
+delete O(n)
+
+Example of unbalanced binary tree is:
+
+	     6 
+	   /   \
+	  4     8	
+	 / \     \
+	2   7     11
+	   / \	   \
+	  1   9     14
+		      \
+		       17
+
+you can see the right side is becoming a form of linked list or array which are inefficient for seacrh operations. To solve such unbalance problem we have some algorithms to solve such problems
+
+
+PROS AND CONS of BST
+1) Better than O(n), as we have O(log N)
+2) Ordered
+3) Flexible size
+
+CONS
+There is no O(1) operation
+No O(1) operations
