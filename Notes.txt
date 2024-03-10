@@ -969,6 +969,21 @@ console.log('3')
 // NO matter your time is 0 in setTimeOut JS will still pass setTimeOut code through web API --> Callback --> event loop. Therefore it will get printed after other thread executed during that time. 
 
 
+****************Stack vs Queue
+***Stack
+1) Stack works on LIFO principle.
+2) Objects are inserted and removed from the same end that is end/top of the list/stack. 
+3) Insert operation is called push.
+4) Delete operation is called pop
+5) In stack there is NO wastage of memory scope. (There is minimal wastage of memory since elements are inserted and removed from the same end, and there is no need for additional pointers or references)
+
+***Queue
+1) Stack works on FIFO principle.
+2) Objects are inserted at the end (tail) of the list and removed from the start (head) of list.
+3) Insert operation is called enqueue.
+4) Delete operation is called dequeue.
+5) In stack there is a wastage of memory scope. (Wastage of memory may occur due to the need for extra space to maintain references or pointers to the front and rear elements. This extra space is often required to allow for efficient insertion and deletion operations.)
+
 // ******************Implementing stack data structure using linked list
 
 class Node {
@@ -1134,11 +1149,11 @@ There are so many trees out there. We will learn about those only which will be 
 As we all know binary means 2. So in binary trees we can only have either 0 1 or 2 nodes with a parent node.
 There won't be a case where there are more than 2 nodes are coming from one parent node. Example of binar tree is given below:
 
-	     1 
+	     9 
 	   /    \
-	  4      3	
+	  4      5      	
 	 / \    /  \
-	6   4  5    7
+	1   8  3    7
 
 This kind of Binary tree is called as PERFECT BINARY TREE.
 perfect binary trees are the efficient one and there number of nodes are getting double when we move each step down.
@@ -1226,3 +1241,1640 @@ PROS AND CONS of BST
 CONS
 There is no O(1) operation
 No O(1) operations
+
+************Implementing trees from scratch using the concept of linked list
+class Node {
+  constructor(value) {
+    this.left = null;
+    this.right = null;
+    this.value = value;
+  }
+}
+
+class BinarySearchTree {
+  constructor() {
+    this.root = null;
+  }
+  insert(value) {
+    const newNode = new Node(value);
+
+    if (this.root === null) {
+      this.root = newNode;
+    } else {
+      let currentNode = this.root;
+      while (true) {
+        if (currentNode.value > value) {
+          // Left
+          if (!currentNode.left) {
+            currentNode.left = newNode;
+            return this;
+          }
+          currentNode = currentNode.left;
+        } else {
+          // Right
+          if (!currentNode.right) {
+            currentNode.right = newNode;
+            return this;
+          }
+          currentNode = currentNode.right;
+        }
+      }
+    }
+  }
+  lookup(value) {
+    if (!this.root) {
+      return false;
+    }
+    let currentNode = this.root;
+
+    while (currentNode) {
+      if (currentNode.value > value) {
+        // Left
+        currentNode = currentNode.left;
+      } else if (currentNode.value < value) {
+        // Right
+        currentNode = currentNode.right;
+      } else if (currentNode.value === value) {
+        return currentNode;
+      }
+    }
+    return false;
+  }
+
+  remove(value) {
+    if (!this.root) {
+      return false;
+    }
+    let currentNode = this.root;
+    let parentNode = null;
+    while (currentNode) {
+      if (value < currentNode.value) {
+        parentNode = currentNode;
+        currentNode = currentNode.left;
+      } else if (value > currentNode.value) {
+        parentNode = currentNode;
+        currentNode = currentNode.right;
+      } else if (currentNode.value === value) {
+        //We have a match, get to work!
+
+        //Option 1: No right child:
+        if (currentNode.right === null) {
+          if (parentNode === null) {
+            this.root = currentNode.left;
+          } else {
+            //if parent > current value, make current left child a child of parent
+            if (currentNode.value < parentNode.value) {
+              parentNode.left = currentNode.left;
+
+              //if parent < current value, make left child a right child of parent
+            } else if (currentNode.value > parentNode.value) {
+              parentNode.right = currentNode.left;
+            }
+          }
+
+          //Option 2: Right child which doesnt have a left child
+        } else if (currentNode.right.left === null) {
+          currentNode.right.left = currentNode.left;
+          if (parentNode === null) {
+            this.root = currentNode.right;
+          } else {
+            //if parent > current, make right child of the left the parent
+            if (currentNode.value < parentNode.value) {
+              parentNode.left = currentNode.right;
+
+              //if parent < current, make right child a right child of the parent
+            } else if (currentNode.value > parentNode.value) {
+              parentNode.right = currentNode.right;
+            }
+          }
+
+          //Option 3: Right child that has a left child
+        } else {
+          //find the Right child's left most child
+          let leftmost = currentNode.right.left;
+          let leftmostParent = currentNode.right;
+          while (leftmost.left !== null) {
+            leftmostParent = leftmost;
+            leftmost = leftmost.left;
+          }
+
+          //Parent's left subtree is now leftmost's right subtree
+          leftmostParent.left = leftmost.right;
+          leftmost.left = currentNode.left;
+          leftmost.right = currentNode.right;
+
+          if (parentNode === null) {
+            this.root = leftmost;
+          } else {
+            if (currentNode.value < parentNode.value) {
+              parentNode.left = leftmost;
+            } else if (currentNode.value > parentNode.value) {
+              parentNode.right = leftmost;
+            }
+          }
+        }
+        return true;
+      }
+    }
+  }
+}
+
+const tree = new BinarySearchTree();
+tree.insert(9);
+tree.insert(4);
+tree.insert(6);
+tree.insert(20);
+tree.insert(170);
+tree.insert(15);
+tree.insert(1);
+tree.remove(170);
+JSON.stringify(traverse(tree.root));
+console.log(tree.lookup(20));
+//     9
+//  4     20
+//1  6  15  170
+
+function traverse(node) {
+  const tree = { value: node.value };
+  tree.left = node.left === null ? null : traverse(node.left);
+  tree.right = node.right === null ? null : traverse(node.right);
+  return tree;
+}
+
+***************TVL Trees and Red black trees
+These are the trees which are self balanced. They do balance them self automatically by using some sort of algorithm. For better understanding of these Trees visit: visualgo
+
+
+*********Binary Heap Trees
+Binary Heap trees are same as as Binary Search trees but the difference is that as we go down the value of the lower node will always be less than the value of the parent node.
+
+NOTE: Dont mix heap trees with heap memory which most of the programming languages have.
+example:
+	     9 
+	   /    \
+	  4      5      	
+	 / \    /  \
+	1   2  3    7
+
+This is an example of BST here you can see left down right value is decreasing and right down value is increasing.
+
+BHT (Binary Heap tree) example:
+
+	     9 
+	   /    \
+	  6      5      	
+	 / \    /  \
+	1   2  8    7
+
+Here there is no concept of left is smaller than right. In BHT the only thing we have is the decreasing value from top to bottom. It is also called Max Binary Heap tree.
+In Min Binary Heap tree it is reversed. Value drease from top to bottom.
+
+*******Big O of BHT
+
+lookup O(n)
+insert O(logN)
+delete O(logN)
+
+BHTs are used in sorting algorithms
+
+*********why do we need BHTs? 
+To understand this why do we need such type of data structures we first have to understand priority queues.
+
+
+********Priority Queue
+In Priority queue the element that have higher priority will be allowed to got first. 
+
+In Max binary heap we have highest value on the top and for min binary heap we have lowest value on th top. Binary heap is a data struture which is very very useful when you want get highest or lowest value. They will balanced as we have no restriction in putting left of right.
+
+
+Pros and Cons of BHT:
+
+They are better than O(n).
+More Flexible
+priority
+Fast insert
+
+Cons:
+
+slower lookup O(n)
+
+*************Trie
+
+Trie  is a data structure mostly used to store alphabets or words in a tree. The are for searching strings 
+
+The big O is dependent on the length of the word that we are searching for.
+
+The are good for space complexity. We do not need to store two words separately starting with the same letter. We can have them in a common node.
+
+******************
+
+NOTE: There are several trees out there. At the end of the day they all are trees with some different rules of storing data.
+
+**************Graphs
+Image graphs as network. Where there are several nodes connecting to each other.
+Linked list are the types of trees and trees are the types of graphs.
+
+Google uses graphs to find the shortest path. Facebook used graphs for their social network.
+
+************Types of graphs
+Since there are a lot of graphs but we can differentiate them on the basis of some characteristics which are as follow:
+1) Directional and undirectional graphs: (In directional graphs you can only go one way and will have arrows, e.g twitter uses Directional graphs as one can follow one, the one do not have 					to follow back. whereas FB use unidirectional graphs as if one is a friend you then you will also be the friend of him)
+2) Weighted and unweighted graphs: (Wieghted graphs are those in which we can store information Not only in nodes but in edges as well. They are used to find the shortest or most optimized 					path.) 
+3) Cyclic and Acyclic graphs: (Cyclic graphs are those in which elements are connected in the form of a closed loop and you can go back to your initial node. whereas a cyclic do not form 				circle)
+
+NOTE: A graph can be the combination of the above characteristics. For example: Directed Acyclic Graph (DAG is very common)
+
+***********Ways to represent graphs
+Edge List:
+const graph = [[0,2], [2,3], [2,1], [1,3]]
+here syntax: [node1, node2]
+
+Adjacent List:
+const graph = [[2], [2,3], [0,1,3], [1,2]]
+
+here indexes are the actual value of nodes and array on the index it its neighbour for example:
+here at index 0 the node is 2 means that 0 is connected with 2 and so on for others
+
+Adjacent matrix:
+
+const graph = {
+  0: [0, 0, 1, 0],
+  1: [0, 0, 1, 1],
+  2: [1, 1, 0, 1],
+  3: [0, 1, 1, 0],
+};
+
+here 0 1 2 3 means nodes, and index are the values of the node which is connected or not ( 0 or 1)
+
+0: [0, 0, 1, 0] means that 0 is connected with 2 as there is a 1 showing yes at index 2 here 2 is the value of the node.
+
+Implementing graphs from scratch. Graphs might seems complex to implement but they are very easy. All we gonna do just to fill the below syntax:
+
+{0:[node1, node2]}
+
+class Graph {
+  constructor() {
+    this.numberOfNodes = 0;
+    this.adjacentList = {};
+  }
+  addVertex(node) {
+    this.adjacentList[node] = [];
+    this.numberOfNodes++;
+  }
+  addEdge(node1, node2) {
+    //undirected Graph
+    this.adjacentList[node1].push(node2);
+    this.adjacentList[node2].push(node1);
+    
+  }
+  showConnections() {
+    const allNodes = Object.keys(this.adjacentList);
+    for (let node of allNodes) {
+      let nodeConnections = this.adjacentList[node];
+      let connections = '';
+      let vertex;
+      for (vertex of nodeConnections) {
+        connections += vertex + ' ';
+      }
+      console.log(node + '-->' + connections);
+    }
+  }
+}
+
+const myGraph = new Graph();
+myGraph.addVertex('0');
+myGraph.addVertex('1');
+myGraph.addVertex('2');
+myGraph.addVertex('3');
+myGraph.addVertex('4');
+myGraph.addVertex('5');
+myGraph.addVertex('6');
+myGraph.addEdge('3', '1');
+myGraph.addEdge('3', '4');
+myGraph.addEdge('4', '2');
+myGraph.addEdge('4', '5');
+myGraph.addEdge('1', '2');
+myGraph.addEdge('1', '0');
+myGraph.addEdge('0', '2');
+myGraph.addEdge('6', '5');
+
+myGraph.showConnections();
+//Answer:
+// 0-->1 2
+// 1-->3 2 0
+// 2-->4 1 0
+// 3-->1 4
+// 4-->3 2 5
+// 5-->4 6
+// 6-->5
+
+
+*******Pros and cons of graphs
+Graphs are good for relations. The data which have to some relation. You will use libraries suchas neo4j to make complex data structure like this.
+They are hard to scale.
+
+
+************************Algorithms
+
+What are algorithms? At the end of the day algorithms are simply functions that do some actions on data which we store in data structures that we have learned above.
+There are algorithms which we can use to improve our time and space complexity.
+
+Following are the algorithms that we are gonna learn
+1) Sorting
+2) Dynamic programming
+3) BFS + DFS (Searching algorithms)
+4) Recursion
+
+
+**************Recursion
+Technically, Recursion is not an algorithm but its a concept which will be using ahead in several alogrithms. It is used in treversing the list. (Traversing means accessing each element of data structure at least once. Linked List traversal means accessing all the elements of the list starting from the head node to the last node. Traversing a tree and graph means visiting every node at least once.)
+
+Recursion is nothing simply calling itself. 
+
+e.g
+
+function myFunc(){
+	myfunc();
+}
+
+Recurion is used where subtasks are repeating themselves.
+
+*************Problem with recursion
+
+The main problem with the recusion is "Stack Overflow" which means that stack memory where computer allocates some memory the each function which is get calling. Since in recursion computer calls the same function infinite so its memory/stack will get out of memory. 
+
+you can check the stack get fulling using debugger mode in your browser as below:
+e.g
+
+function myFunc(){
+	myfunc();
+}
+
+
+*********so whats the solution of this problem?
+Recursive functions have two paths:
+1) Recursive case (infinite)
+2) Base case (once objective has achieved stop calling the function)
+
+The solution is to a base case or stop point which we will be using to get of this infinite loop recursion.
+
+e.g
+let counter = 0;
+function myFunc(){
+if (counter > 3){
+	return 'done!';
+}
+counter++
+	myfunc();
+}
+
+myFunc();
+
+//output: undefined
+
+//
+let counter = 0;
+function myFunc(){
+if (counter > 3){
+	return 'done!';
+}
+counter++
+	return myfunc(); //here we must have to use word return so that myFunc return value all the way to the top. See below explanation
+}
+
+myFunc();
+
+//output: 'done'
+
+//Anatomy of Recursion
+myFunc(myFunc(myFunc(myFunc(myFunc())))) //actually this kind of thing happens in recursion.
+ So your most nested function will return the base case value that is 'done!' in this case. This value will keep moving upward upward and upward till the final function. So there for it is important to use "return" before 
+
+
+***********Rules of making a recursive function
+
+//1. Identify the base case (when to end the loop)
+  2. Identify the recursive case (when loop will keep continue)
+  3. Get Closer and closer and return when needed. Usually you would have 2 returns ().
+
+
+*****************Finding Factorial of a number using loop and recursion
+
+// **************** Finding factorial of number using recursion or loop
+
+// using recursion
+
+function findFactorialUsingRecursion(number) {
+  if (number == 2) {
+    return 2;
+  }
+
+  return number * findFactorialUsingRecursion(number - 1);
+}
+
+findFactorialUsingRecursion(5);
+
+
+// ******using for loop
+function findFactorialUsingLoop(number) {
+  let answer = 1;
+  for (i = 2; i <= number; i++) {
+    answer = answer * i;
+  }
+  return answer;
+}
+
+findFactorialUsingLoop(5);
+
+
+
+Big O for both of the function is O(n).
+
+
+// *************Implementing Fibonacchi series using iterative method
+// using iterative
+
+function createFibonacchi(index) {
+  let arr = [0, 1];
+
+  for (i = 0; i < index - 1; i++) {
+    nextvalue = arr[i] + arr[i + 1];
+    arr.push(nextvalue);
+  }
+  // console.log(arr);
+  return arr[index];
+}
+
+console.log(createFibonacchi(1));
+
+// using recursion
+function createFibonacchiRecursive(index) {
+  if (index < 2) {
+    return index;
+  }
+
+  return (
+    createFibonacchiRecursive(index - 1) + createFibonacchiRecursive(index - 2)
+  );
+}
+
+console.log(createFibonacchiRecursive(8));
+
+**NOTE**:
+
+Here BigO of itertaive approach is O(n-2) or simply O(n) that is linear time. But the BigO of recursive approach is O(2^n) which is very very bad. Why would we use recursive method which is very complex and have very bad time complexity? we will discuss it later. As we all know everything comes at some trade off.
+
+*************Recursive pros and cons
+There is a theorem which says "Anything that can be done by recursion, can also be done using iterative approach (loop)"
+Pros:
+Recursion code is:
+DRY (dont repeat yourself)
+Readable
+
+Cons:
+But it can use large stack (means everytime a function call take some space in call stack)
+
+But there is an approach called "Tail call optimization" which can be used to free the space of call stack. This technique can be helpful to efficiently.
+
+***********When to use recursion?
+
+Everytime when you are using a tree or converting something into a tree, then consider recursion.
+
+//probelm should have following characteristics, so recursion would be beneficial
+1) Divide the problem into subproblems that are smaller instances of the same problem.
+2) Each instance of the subproblem is identical in nature
+3) The solution of each subproblem can be combined to solve the problem in hand
+
+
+recursions are widely used in searching algorithms.
+
+********************Sorting
+Hey every language have a built-in sorting method. Why dont we use that? 
+
+*********The issue with sort()
+That sorting method is not suitable for large data sets. We have to care about Big O.
+"Do not trust blindly on your language sort method"
+Cause we dont know how the sorting method was implemeneted. Therefore, we recommend to read the documentation of these methods.
+
+Example:
+const letters = [2,65, 34, 2, 1,7,8];
+
+console.log(letters.sort())
+
+//Expected : [1, 2, 2, 7, 8, 34, 65]
+//Actual Output: [1, 2, 2, 34, 65, 7, 8]
+
+SOlution:
+
+To solve this properly we have to do something like this:
+const letters = [2,65, 34, 2, 1,7,8];
+
+console.log(
+  letters.sort(function (a, b) {
+    return a - b;
+  })
+);
+
+//Output : [1, 2, 2, 7, 8, 34, 65]
+
+Why is this happened so?
+In JS the sorting method sorts on the basis of uni code control character. Means here 34 will be first converted to string '34' and then its first character will be grabbed that is '3' and then it will be placed in the list according to its Uni code control characters.
+
+if we console the unicode of 3 and 6 as its grabbing only first letter we will have
+console.log('34'.charCodeAt(0)) // 51
+console.log('65'.charCodeAt(0)) // 54
+
+Therefore, it is happening this way.
+
+Example 2: Accent alphabets
+const a = 'réservé'; // With accents, lowercase
+const b = 'RESERVE'; // No accents, uppercase
+
+console.log(a.localeCompare(b));
+// Expected output: 1
+console.log(a.localeCompare(b, 'en', { sensitivity: 'base' }));
+// Expected output: 0
+
+*******************
+https://www.toptal.com/developers/sorting-algorithms
+This is a site of animation of sorting algorithms. We all just need to remember out their trade off. We will not implement the algorithms for scratch in our daily life. We just have to learn when and where to use which one.
+Following are the sorting algorithms that we are gonna learn:
+Bubble sort
+Insertion sort
+Selection sort
+Merge sort
+Quick sort
+
+
+// ***************Bubble sort Algorithm
+In this algorithm we start from the beginning of the array and start comparing first two numbers. The one which is larger will be shifted to the right and then it will compare with the number which is next to it until the largest number comes at the end of the array. In simple bubble sort algo simply bubbles out the largest value to the end of the array. Ultimately we ends up with a sorted array. 
+
+// Implementation:
+const letters = [2, 65, 34, 2, 1, 7, 8];
+
+function bubbleSort(array) {
+  const length = array.length;
+  for (let i = 0; i < length; i++) {
+    for (let j = 0; j < length - 1; j++) {
+      if (array[j] > array[j + 1]) {
+        swap(array, j, j + 1);
+      }
+    }
+  }
+}
+
+const swap = (array, indexA, indexB) => {
+  let temp = array[indexA];
+  array[indexA] = array[indexB];
+  array[indexB] = temp;
+};
+
+bubbleSort(letters);
+console.log(letters);
+
+NOTE: Here time complexity is O(n^2) and space complexity is O(1)
+
+****************Select Sorting algorithm
+In this algorithm we assume the first value of the array as minimum value then we campare it with the rest of the array, if the first value which we assumed as minimum is not minimum then we update the value at first index with the one which is actually minimum then assumed value. And so on.
+The reason why we call is select sort is that we select a value from the array and then compare it with rest of the elements and then we replace it.
+
+Big O of select algorithm is:
+Time complexity: O(n^2)
+Space Complexity: O(1)
+
+//Implementation
+
+const numbers = [99, 44, 6, 2, 1, 5, 63, 87, 283, 4, 0];
+
+function selectionSort(array) {
+    const length = array.length;
+
+    for (let i = 0; i < length - 1; i++) {
+        // Set current index as minimum
+        let min = i;
+        let temp = array[i];
+
+        for (let j = i + 1; j < length; j++) {
+            if (array[j] < array[min]) {
+                // Update minimum if current is lower that what we had previously
+                min = j;
+            }
+        }
+
+        array[i] = array[min];
+        array[min] = temp;
+    }
+
+    return array;
+}
+
+console.log(selectionSort(numbers));
+
+********************Insertion Sort Alogirthm.
+
+In this alogrithm we create an array as we move forward in the given array. And compare the coming value with the array we have created and insert the coming value in right place in our created array. Here right place means placing in order.
+
+It is best of the cases where the given list is almost sorted where it gives O(n) linear time.
+But in case of list which is very large and not sorted then it will give O(n^2). It is efficient for the lists which are almosted sorted.
+
+//Implementation:
+const numbers = [99, 44, 6, 2, 1, 5, 63, 87, 283, 4, 0];
+
+function insertionSort(array) {
+    const length = array.length;
+
+    for (let i = 0; i < length; i++) {
+        if (array[i] < array[0]) {
+            // Move number to the first position
+            array.unshift(array.splice(i, 1)[0]);
+        } else {
+            // Find where number should go
+            for (let j = 1; j < i; j++) {
+                if (array[i] > array[j - 1] && array[i] < array[j]) {
+                    // Move number to the right spot
+                    array.splice(j, 0, array.splice(i, 1)[0]);
+                }
+            }
+        }
+    }
+
+    return array;
+}
+
+console.log(insertionSort(numbers));
+
+******************Merge Sort
+It is a divide and conquer algorithm which uses recursion concept. This is most efficient algorithm out of above all mentioned sorting algorithms. The time complexity of Merge sort is O(nlog n) which is better than O(n^2)
+
+Here the concept is that the it splits the array in to 2 pieces and the futher divided those pieces until we reach till the single element. And then those single elements would be compared with each other and then merge. Its like merging the opened tree. Like first we expand a tree and then sort it and then merge it.
+
+//Implementation
+const numbers = [99, 44, 6, 2, 1, 5, 63, 87, 283, 4, 0];
+
+function mergeSort(array) {
+    if (array.length === 1) {
+        return array;
+    }
+
+    // Split Array in into right and left
+    const length = array.length;
+    const middle = Math.floor(length / 2);
+    const left = array.slice(0, middle);
+    const right = array.slice(middle);
+
+    return merge(mergeSort(left), mergeSort(right));
+}
+
+function merge(left, right) {
+    const result = [];
+    let leftIndex = 0;
+    let rightIndex = 0;
+
+    while (leftIndex < left.length && rightIndex < right.length) {
+        if (left[leftIndex] < right[rightIndex]) {
+            result.push(left[leftIndex]);
+            leftIndex++;
+        } else {
+            result.push(right[rightIndex]);
+            rightIndex++;
+        }
+    }
+
+    return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
+}
+
+const answer = mergeSort(numbers);
+console.log(answer);
+
+************Quick sort algo
+In this algorithm we pick a pivot point and say all values greater then pivot point come its right and all value less than pivot point come to its left. Once it done we have two arrays one which is left to the pivot and other which is right to the pivot. Now we will again assume a pivot one from left and then sort the left accordingly and one from right and then sort it accordingly. And finally we will end up a sorted array
+
+//Implementation
+const numbers = [99, 44, 6, 2, 1, 5, 63, 87, 283, 4, 0];
+
+function quickSort(array, left, right) {
+  const len = array.length;
+  let pivot;
+  let partitionIndex;
+
+  if (left < right) {
+    pivot = right;
+    partitionIndex = partition(array, pivot, left, right);
+
+    //sort left and right
+    quickSort(array, left, partitionIndex - 1);
+    quickSort(array, partitionIndex + 1, right);
+  }
+  return array;
+}
+
+function partition(array, pivot, left, right) {
+  let pivotValue = array[pivot];
+  let partitionIndex = left;
+
+  for (let i = left; i < right; i++) {
+    if (array[i] < pivotValue) {
+      swap(array, i, partitionIndex);
+      partitionIndex++;
+    }
+  }
+  swap(array, right, partitionIndex);
+  return partitionIndex;
+}
+
+function swap(array, firstIndex, secondIndex) {
+  var temp = array[firstIndex];
+  array[firstIndex] = array[secondIndex];
+  array[secondIndex] = temp;
+}
+
+//Select first and last index as 2nd and 3rd parameters
+quickSort(numbers, 0, numbers.length - 1);
+console.log(numbers);
+
+
+*************When to use which sorting algorithm?
+Bubble and selection: Not so efficient. No gonna use in practicle life they are just for teaching purposes.
+Insertion: Use when input is smaller or array is almost sorted.
+Merge sort: It is the best. Even in worst case it gives Big O of nlogn.
+Quick sort: It is same as merge sort as it also gives Big O of nlogn. But if you dont select the right pivot value it can be worst as O (n^2) but in terms of space complexity it is better than Merge sort. So we can say in case of right pivot point Quick sort is best amongst all as it is best in terms of space and best in terms of speed.
+
+***********Can we beat O(nlogn)?
+In case of comparison sorting algorithms it is mathematically impossible. But in case of non-comparison sorting algortihms we can.
+such as:
+Radix and counting. These are the algorithms which are non comparison means they do sorting without comparison. But how?
+They use binary codes to compare as the integers stores in the  memory. They used that knowledge. They are very very complex algorithms and can be only implemented to integers at very short range.
+
+NOTE: Sort method in JS use which sorting algorithm? Since we have ECMA script in JS which is a standard and standard do not mention in which algo method should be implemented so It depends on the browsers engine. For example in mozilla the sorting method use Merge sort. In chrome's V8 engine lists are sorted using quick sort and insert sort for smaller arrays. 
+
+
+
+***********************Searching Algorithm
+There are many searching algorithms few of them are given below:
+Linear Search
+Binary Search
+Depth First Search (DFS)
+Breadth First Search (BFS)
+
+***********Linear Search
+In linear search we have to loop over all the elements step by step. Its bigO is O(n)
+In the best it can be O(1)  when the item we are looking for is the first item in an array.
+
+There are so many built-in methods which use linear search such as:
+
+array.indexOf('any_iteam') //returns index
+
+array.findIndex(function(item)=>{item === 'any_item'}); //return index
+
+array.find(function(item)=>{item === 'any_item'}); //return item
+
+array.includes('any_item'); //true or false
+
+************Binary Search
+do we have any benefit if the array is sorted?
+If we know the list is sorted then we can use Binary search. Binary search uses divide and conquer approach in which we start finding a number from the middle of the array.
+
+e.g arr = [1,3,4,6,9,12,34,65,94]
+
+here let say we want to find 65.
+
+so we will first go to the middle which is 9 here and we will check is 65>9 if yes, then ignore all elements left to the 9 and now we have left with [9,12,34,65,94]
+here we will again divide it from the middle and will follow the same procedure. Is 65>34 if yes then ignore all elements left to 34 now we will left with. [34,65,94]
+
+here middle point that is 65 is our answer.
+Big O of binary search is O(logN)
+
+Have you noticed a thing that is it like a tree?
+Yes it is, storing data in tree data strcuture on which we are supposed to do search in future is more efficient as we can apply binary search on them. and we can reduce the time complexity.
+
+
+******************BFS (Breadth First Search) + DFS (Deabth First search)
+What if in trees and graphs we are supposed to visit each node? In such cases we know our BigO will be O(n). Visiting each node is called traversal. For such purposes we have BFS and DFS.
+They are also called traversal algorithms.
+
+
+***********BFS:
+In breadth first search we go from left to right on each level of the tree. 
+
+if we have tree like
+	    1 
+	   / \
+	  4   3	
+	 / \
+	6   9
+
+Then it will go like [1,4,3,6,9] And then it will find the node we are looking for.
+BFS takes a memory as we have to keep track on every single node as we are going through it.
+***PROS AND CONS of BFS:
+Pros:
+used for finding the shortest path.
+And it goes to the closer node first.
+
+Cons:
+More memory requires as we have to keep track over all pointers of the node which we are visiting.
+
+NOTE: If you know that your finding item is at top level of the tree or graph then we can use BFS.
+
+************DFS (Deapth First search)
+In Deapth first search are we go all the way in a leaf of a tree and then come back up. First we visit the all left nodes and then once left half portion has completed then we go for right half of the tree. It carries less memory as we do not have to remember all the pointers like BFS
+
+***PROS AND CONS of DFS
+Pros:
+Is good for answering th question that does the path exist between 2 nodes? 
+Less memory
+
+Cons:
+Can get slow in case the graph or tree is very very deep. Therefore they are not good at finding the shortest path.
+
+
+NOTE: If you know that your finding item is at low level of the tree or graph then we can use DFS.
+
+********Quiz
+
+//If you know a solution is not far from the root of the tree:
+BFS
+
+//If the tree is very deep and solutions are rare: 
+BFS - DFS will be slower
+
+//If the tree is very wide:
+DFS - BFS will need too much memory, in a queue
+
+//If solutions are frequent but located deep in the tree:
+DFS
+
+//Determining whether a path exists between two nodes:
+DFS
+
+//Finding the shortest path:
+BFS
+
+
+// *********************Implementing BFS algorithm from scratch
+// Here first we have created a binary tree from scratch and then we are implementing BFS
+class Node {
+  constructor(value) {
+    this.left = null;
+    this.right = null;
+    this.value = value;
+  }
+}
+
+class BinarySearchTree {
+  constructor() {
+    this.root = null;
+  }
+  insert(value) {
+    const newNode = new Node(value);
+    if (this.root === null) {
+      this.root = newNode;
+    } else {
+      let currentNode = this.root;
+      while (true) {
+        if (value < currentNode.value) {
+          //Left
+          if (!currentNode.left) {
+            currentNode.left = newNode;
+            return this;
+          }
+          currentNode = currentNode.left;
+        } else {
+          //Right
+          if (!currentNode.right) {
+            currentNode.right = newNode;
+            return this;
+          }
+          currentNode = currentNode.right;
+        }
+      }
+    }
+  }
+  lookup(value) {
+    if (!this.root) {
+      return false;
+    }
+    let currentNode = this.root;
+    while (currentNode) {
+      if (value < currentNode.value) {
+        currentNode = currentNode.left;
+      } else if (value > currentNode.value) {
+        currentNode = currentNode.right;
+      } else if (currentNode.value === value) {
+        return currentNode;
+      }
+    }
+    return null;
+  }
+  remove(value) {
+    if (!this.root) {
+      return false;
+    }
+    let currentNode = this.root;
+    let parentNode = null;
+    while (currentNode) {
+      if (value < currentNode.value) {
+        parentNode = currentNode;
+        currentNode = currentNode.left;
+      } else if (value > currentNode.value) {
+        parentNode = currentNode;
+        currentNode = currentNode.right;
+      } else if (currentNode.value === value) {
+        //We have a match, get to work!
+
+        //Option 1: No right child:
+        if (currentNode.right === null) {
+          if (parentNode === null) {
+            this.root = currentNode.left;
+          } else {
+            //if parent > current value, make current left child a child of parent
+            if (currentNode.value < parentNode.value) {
+              parentNode.left = currentNode.left;
+
+              //if parent < current value, make left child a right child of parent
+            } else if (currentNode.value > parentNode.value) {
+              parentNode.right = currentNode.left;
+            }
+          }
+
+          //Option 2: Right child which doesnt have a left child
+        } else if (currentNode.right.left === null) {
+          currentNode.right.left = currentNode.left;
+          if (parentNode === null) {
+            this.root = currentNode.right;
+          } else {
+            //if parent > current, make right child of the left the parent
+            if (currentNode.value < parentNode.value) {
+              parentNode.left = currentNode.right;
+
+              //if parent < current, make right child a right child of the parent
+            } else if (currentNode.value > parentNode.value) {
+              parentNode.right = currentNode.right;
+            }
+          }
+
+          //Option 3: Right child that has a left child
+        } else {
+          //find the Right child's left most child
+          let leftmost = currentNode.right.left;
+          let leftmostParent = currentNode.right;
+          while (leftmost.left !== null) {
+            leftmostParent = leftmost;
+            leftmost = leftmost.left;
+          }
+
+          //Parent's left subtree is now leftmost's right subtree
+          leftmostParent.left = leftmost.right;
+          leftmost.left = currentNode.left;
+          leftmost.right = currentNode.right;
+
+          if (parentNode === null) {
+            this.root = leftmost;
+          } else {
+            if (currentNode.value < parentNode.value) {
+              parentNode.left = leftmost;
+            } else if (currentNode.value > parentNode.value) {
+              parentNode.right = leftmost;
+            }
+          }
+        }
+        return true;
+      }
+    }
+  }
+  breadthFirstSearch() {
+    let currentNode = this.root;
+    let list = [];
+    let queue = [];
+    queue.push(currentNode);
+    while (queue.length > 0) {
+      currentNode = queue.shift(); //here we are grabbing the first item as queue follow first come first out principal
+      console.log('currentNode: ', currentNode.value);
+      
+      if (currentNode.left) {
+        queue.push(currentNode.left);
+      }
+      if (currentNode.right) {
+        queue.push(currentNode.right);
+      }
+    }
+    return list;
+  }
+}
+
+const tree = new BinarySearchTree();
+tree.insert(9);
+tree.insert(4);
+tree.insert(6);
+tree.insert(20);
+tree.insert(170);
+tree.insert(15);
+tree.insert(1);
+tree.remove(170);
+JSON.stringify(traverse(tree.root));
+tree.breadthFirstSearch();
+
+//     9
+//  4     20
+//1  6  15  170
+
+function traverse(node) {
+  const tree = { value: node.value };
+  tree.left = node.left === null ? null : traverse(node.left);
+  tree.right = node.right === null ? null : traverse(node.right);
+  return tree;
+}
+
+// *********************Implementing BFS algorithm from scratch using Recursion
+// Here first we have created a binary tree from scratch and then we are implementing BFS using recursion
+class Node {
+  constructor(value) {
+    this.left = null;
+    this.right = null;
+    this.value = value;
+  }
+}
+
+class BinarySearchTree {
+  constructor() {
+    this.root = null;
+  }
+  insert(value) {
+    const newNode = new Node(value);
+    if (this.root === null) {
+      this.root = newNode;
+    } else {
+      let currentNode = this.root;
+      while (true) {
+        if (value < currentNode.value) {
+          //Left
+          if (!currentNode.left) {
+            currentNode.left = newNode;
+            return this;
+          }
+          currentNode = currentNode.left;
+        } else {
+          //Right
+          if (!currentNode.right) {
+            currentNode.right = newNode;
+            return this;
+          }
+          currentNode = currentNode.right;
+        }
+      }
+    }
+  }
+  lookup(value) {
+    if (!this.root) {
+      return false;
+    }
+    let currentNode = this.root;
+    while (currentNode) {
+      if (value < currentNode.value) {
+        currentNode = currentNode.left;
+      } else if (value > currentNode.value) {
+        currentNode = currentNode.right;
+      } else if (currentNode.value === value) {
+        return currentNode;
+      }
+    }
+    return null;
+  }
+  remove(value) {
+    if (!this.root) {
+      return false;
+    }
+    let currentNode = this.root;
+    let parentNode = null;
+    while (currentNode) {
+      if (value < currentNode.value) {
+        parentNode = currentNode;
+        currentNode = currentNode.left;
+      } else if (value > currentNode.value) {
+        parentNode = currentNode;
+        currentNode = currentNode.right;
+      } else if (currentNode.value === value) {
+        //We have a match, get to work!
+
+        //Option 1: No right child:
+        if (currentNode.right === null) {
+          if (parentNode === null) {
+            this.root = currentNode.left;
+          } else {
+            //if parent > current value, make current left child a child of parent
+            if (currentNode.value < parentNode.value) {
+              parentNode.left = currentNode.left;
+
+              //if parent < current value, make left child a right child of parent
+            } else if (currentNode.value > parentNode.value) {
+              parentNode.right = currentNode.left;
+            }
+          }
+
+          //Option 2: Right child which doesnt have a left child
+        } else if (currentNode.right.left === null) {
+          currentNode.right.left = currentNode.left;
+          if (parentNode === null) {
+            this.root = currentNode.right;
+          } else {
+            //if parent > current, make right child of the left the parent
+            if (currentNode.value < parentNode.value) {
+              parentNode.left = currentNode.right;
+
+              //if parent < current, make right child a right child of the parent
+            } else if (currentNode.value > parentNode.value) {
+              parentNode.right = currentNode.right;
+            }
+          }
+
+          //Option 3: Right child that has a left child
+        } else {
+          //find the Right child's left most child
+          let leftmost = currentNode.right.left;
+          let leftmostParent = currentNode.right;
+          while (leftmost.left !== null) {
+            leftmostParent = leftmost;
+            leftmost = leftmost.left;
+          }
+
+          //Parent's left subtree is now leftmost's right subtree
+          leftmostParent.left = leftmost.right;
+          leftmost.left = currentNode.left;
+          leftmost.right = currentNode.right;
+
+          if (parentNode === null) {
+            this.root = leftmost;
+          } else {
+            if (currentNode.value < parentNode.value) {
+              parentNode.left = leftmost;
+            } else if (currentNode.value > parentNode.value) {
+              parentNode.right = leftmost;
+            }
+          }
+        }
+        return true;
+      }
+    }
+  }
+  breadthFirstSearch() {
+    let currentNode = this.root;
+    let list = [];
+    let queue = [];
+    queue.push(currentNode);
+    while (queue.length > 0) {
+      currentNode = queue.shift(); //here we are grabbing the first item as queue follow first come first out principal
+      console.log('currentNode: ', currentNode.value);
+      
+      if (currentNode.left) {
+        queue.push(currentNode.left);
+      }
+      if (currentNode.right) {
+        queue.push(currentNode.right);
+      }
+    }
+    return list;
+  }
+  BreadthFirstSearchR(queue, list) {
+    if (!queue.length) {
+      return list;
+    }
+    const currentNode = queue.shift();
+    list.push(currentNode.value);
+    
+    if (currentNode.left) {
+      queue.push(currentNode.left);
+    }
+    if (currentNode.right) {
+      queue.push(currentNode.right);
+    }
+    
+    return this.BreadthFirstSearchR(queue, list);
+  }
+}
+
+const tree = new BinarySearchTree();
+tree.insert(9);
+tree.insert(4);
+tree.insert(6);
+tree.insert(20);
+tree.insert(170);
+tree.insert(15);
+tree.insert(1);
+tree.remove(170);
+JSON.stringify(traverse(tree.root));
+tree.breadthFirstSearch();
+
+console.log('BFS', tree.breadthFirstSearch());
+console.log('BFSR', tree.BreadthFirstSearchR([tree.root], []))
+
+//     9
+//  4     20
+//1  6  15  170
+
+function traverse(node) {
+  const tree = { value: node.value };
+  tree.left = node.left === null ? null : traverse(node.left);
+  tree.right = node.right === null ? null : traverse(node.right);
+  return tree;
+}
+
+
+****************In-order ,Pre-order, post-order
+
+We can implemented Depth first search we have three ways to implement it.
+We can either do In-order, Pre-order or post-order
+
+//     9
+//  4     20
+//1  6  15  170
+For the above tree following would be different orders:
+
+In-order - [1, 4, 6, 9, 15, 20, 170] //simple ascending order
+Pre-order - [9, 4, 1, 6, 20, 15, 170] //parent to child node
+Post-order - [1, 6, 4, 15, 170, 20, 9] //child to parent node
+
+****************Implementing DFS from scratch using Recursion (its very simple using recursion) and we will implement all three orders
+class Node {
+  constructor(value) {
+      this.left = null;
+      this.right = null;
+      this.value = value;
+  }
+}
+
+class BinarySearchTree {
+  constructor() {
+      this.root = null;
+  }
+  insert(value) {
+      const newNode = new Node(value);
+      if (this.root === null) {
+          this.root = newNode;
+      } else {
+          let currentNode = this.root;
+          while (true) {
+              if (value < currentNode.value) {
+                  //Left
+                  if (!currentNode.left) {
+                      currentNode.left = newNode;
+                      return this;
+                  }
+                  currentNode = currentNode.left;
+              } else {
+                  //Right
+                  if (!currentNode.right) {
+                      currentNode.right = newNode;
+                      return this;
+                  }
+                  currentNode = currentNode.right;
+              }
+          }
+      }
+  }
+  lookup(value) {
+      if (!this.root) {
+          return false;
+      }
+      let currentNode = this.root;
+      while (currentNode) {
+          if (value < currentNode.value) {
+              currentNode = currentNode.left;
+          } else if (value > currentNode.value) {
+              currentNode = currentNode.right;
+          } else if (currentNode.value === value) {
+              return currentNode;
+          }
+      }
+      return null;
+  }
+  remove(value) {
+      if (!this.root) {
+          return false;
+      }
+      let currentNode = this.root;
+      let parentNode = null;
+      while (currentNode) {
+          if (value < currentNode.value) {
+              parentNode = currentNode;
+              currentNode = currentNode.left;
+          } else if (value > currentNode.value) {
+              parentNode = currentNode;
+              currentNode = currentNode.right;
+          } else if (currentNode.value === value) {
+              //We have a match, get to work!
+
+              //Option 1: No right child:
+              if (currentNode.right === null) {
+                  if (parentNode === null) {
+                      this.root = currentNode.left;
+                  } else {
+                      //if parent > current value, make current left child a child of parent
+                      if (currentNode.value < parentNode.value) {
+                          parentNode.left = currentNode.left;
+
+                          //if parent < current value, make left child a right child of parent
+                      } else if (currentNode.value > parentNode.value) {
+                          parentNode.right = currentNode.left;
+                      }
+                  }
+
+                  //Option 2: Right child which doesnt have a left child
+              } else if (currentNode.right.left === null) {
+                  if (parentNode === null) {
+                      this.root = currentNode.left;
+                  } else {
+                      currentNode.right.left = currentNode.left;
+
+                      //if parent > current, make right child of the left the parent
+                      if (currentNode.value < parentNode.value) {
+                          parentNode.left = currentNode.right;
+
+                          //if parent < current, make right child a right child of the parent
+                      } else if (currentNode.value > parentNode.value) {
+                          parentNode.right = currentNode.right;
+                      }
+                  }
+
+                  //Option 3: Right child that has a left child
+              } else {
+                  //find the Right child's left most child
+                  let leftmost = currentNode.right.left;
+                  let leftmostParent = currentNode.right;
+                  while (leftmost.left !== null) {
+                      leftmostParent = leftmost;
+                      leftmost = leftmost.left;
+                  }
+
+                  //Parent's left subtree is now leftmost's right subtree
+                  leftmostParent.left = leftmost.right;
+                  leftmost.left = currentNode.left;
+                  leftmost.right = currentNode.right;
+
+                  if (parentNode === null) {
+                      this.root = leftmost;
+                  } else {
+                      if (currentNode.value < parentNode.value) {
+                          parentNode.left = leftmost;
+                      } else if (currentNode.value > parentNode.value) {
+                          parentNode.right = leftmost;
+                      }
+                  }
+              }
+              return true;
+          }
+      }
+  }
+  BreadthFirstSearch() {
+      let currentNode = this.root;
+      let list = [];
+      let queue = [];
+      queue.push(currentNode);
+
+      while (queue.length > 0) {
+          currentNode = queue.shift();
+          list.push(currentNode.value);
+          if (currentNode.left) {
+              queue.push(currentNode.left);
+          }
+          if (currentNode.right) {
+              queue.push(currentNode.right);
+          }
+      }
+      return list;
+  }
+  BreadthFirstSearchR(queue, list) {
+      if (!queue.length) {
+          return list;
+      }
+      const currentNode = queue.shift();
+      list.push(currentNode.value);
+
+      if (currentNode.left) {
+          queue.push(currentNode.left);
+      }
+      if (currentNode.right) {
+          queue.push(currentNode.right);
+      }
+
+      return this.BreadthFirstSearchR(queue, list);
+  }
+  DFSInOrder() {
+      return traverseInOrder(this.root, []);
+  }
+  DFSPostOrder() {
+      return traversePostOrder(this.root, []);
+  }
+  DFSPreOrder() {
+      return traversePreOrder(this.root, []);
+  }
+}
+
+function traverseInOrder(node, list) {
+  console.log(node.value);
+  if (node.left) {
+      traverseInOrder(node.left, list);
+  }
+  list.push(node.value);
+  if (node.right) {
+      traverseInOrder(node.right, list);
+  }
+  return list;
+}
+
+function traversePreOrder(node, list) {
+  console.log(node.value);
+  list.push(node.value);
+  if (node.left) {
+      traversePreOrder(node.left, list);
+  }
+
+  if (node.right) {
+      traversePreOrder(node.right, list);
+  }
+  return list;
+}
+
+function traversePostOrder(node, list) {
+  console.log(node.value);
+  if (node.left) {
+      traversePostOrder(node.left, list);
+  }
+
+  if (node.right) {
+      traversePostOrder(node.right, list);
+  }
+  list.push(node.value);
+  return list;
+}
+
+const tree = new BinarySearchTree();
+tree.insert(9);
+tree.insert(4);
+tree.insert(6);
+tree.insert(20);
+tree.insert(170);
+tree.insert(15);
+tree.insert(1);
+
+// console.log("BFS", tree.BreadthFirstSearch());
+// console.log("BFS", tree.BreadthFirstSearchR([tree.root], []));
+
+console.log(tree.DFSPostOrder());
+//     9
+//  4     20
+//1  6  15  170
+
+function traverse(node) {
+  const tree = { value: node.value };
+  tree.left = node.left === null ? null : traverse(node.left);
+  tree.right = node.right === null ? null : traverse(node.right);
+  return tree;
+}
+ 
+
+************What is the time and space complexity of a breadth first and depth first tree traversal?
+
+BFS:
+
+Time complexity is O(|V|), where |V| is the number of nodes. You need to traverse all nodes.
+Space complexity is O(|V|) as well - since at worst case you need to hold all vertices in the queue.
+
+DFS:
+
+Time complexity is again O(|V|), you need to traverse all nodes.
+Space complexity - depends on the implementation, a recursive implementation can have a O(h) space complexity [worst case], where h is the maximal depth of your tree.
+Using an iterative solution with a stack is actually the same as BFS, just using a stack instead of a queue - so you get both O(|V|) time and space complexity.
+
+(*) Note that the space complexity and time complexity is a bit different for a tree than for a general graphs becase you do not need to maintain a visited set for a tree, and |E| = O(|V|), so the |E| factor is actually redundant.
+
+*****************BFS and DFS for graphs
+Since we know trees are the type of graphs so this means we can also apply BFS and DFS on graphs as well. Graphs and trees are best for the data having relations between them. 
+BFS is best for finding the shortes path as BFS in graphs looks for the closest node first and then move forward. This is very helpful in applications such as facebook to check the closest friend and recommended lists in case of amazon. But BFS takes more memory
+
+whereas DFS is best for checking whether the item exists or not. It is same as solving a maze. Where you go as deep as you can until you find a block from where you can go further. And then you track back yourself and find some other ways. It takes less memory but It can get very slow if you go very very deep into the graph of tree
+
+***************Dijkstra and Bellman ford algorithms
+These are two types of algorithm made for find the shortest path on graphs. But dont we have BFS for shortest path? Yes we have but BFS do not count the weight on edges of the graphs. We have studied in the graphs section that a graph data structure can have weights on their edges. Its same like some roads have more traffic than the other. So for taking the edges into account we use Dijskter and Bellman-ford alogorithm.
+
+*********Dijsktra VS Bellman-Ford
+Dijsktra is little bit faster than Bellman-Ford.
+Bellman-ford algorithm can solve the graphs having negative weights. Whereas Dijsktra cannot solve graphs having negative weights.
+
+So use Dijsktra when we have weighted graphs
+use bellman-ford algorithm when we have weighted graphs with negative values.
+
+**********************************************************
+*******************Dynamic Programming
+Dynamic programming is a technique to optimize the program. In Dynamic programming we solve a problem by breaking it down into the sub problems and then sloving each subproblem storing their solutions so that in case any of the solution might be used in future.
+
+************Memoization
+Memoization is a caching technique in which we save operations which are going to be call several times. In some cases if the parameters of a function are same and function has to perform the same long calculations over and over again. then instead of doing all the long calculations again we can do something like that:
+//learn to cache
+function addTo80(n) {
+  console.log('long calcultion');
+  return n + 80;
+}
+
+addTo80(5)
+
+// here above on every time we call the function 'long calculation' will be printed. Means we can cached the result if parameters of the function are not changing.
+
+let cache = {};
+function memoizeAddTo80(n) {
+  if (n in cache) {
+    return cache[n];
+  } else {
+    console.log('long time');
+    const answer = n + 80;
+    cache[n] = answer;
+    return answer;
+  }
+}
+
+// console.log(1, memoizeAddTo80(6))
+// // console.log(cache)
+// // console.log('-----------')
+// console.log(2, memoizeAddTo80(6))
+
+**NOTE**: Here we a problem is that our cached object is a global object which should not be. It should be inside the function. But simply placing object inside the function will cause resetting the cache object everytime. This way long calculation will be printed again and again on every call.
+
+The right way to make the cache object a local object is by using closures.
+
+// let's make that better with no global scope. This is closure in javascript so.
+function memoizeAddTo80(n) { 
+  let cache = {};
+  return function(n) {
+    if (n in cache) {
+      return cache[n];
+    } else {
+      console.log('long time');
+      const answer = n + 80;
+      cache[n] = answer;
+      return answer;
+    }
+  }
+}
+
+const memoized = memoizeAddTo80();
+console.log(1, memoized(6))
+// console.log(cache)
+// console.log('-----------')
+console.log(2, memoized(6))
+
+************Dynamic programming best example of Fibonacci sequence
+As we know we can create fibonacci sequence using recursion and iterative approach.
+Recursive approach have very poor time complexity of O(2^n) but we can significantly reduce it till O(n) using memoization technique.
+
+//Traditional Fibonacci sequence using recursion:
+//********************Fibonacci using recursion
+
+let calculations = 0;
+function FibonacchiRecursive(n) {
+  calculations++;
+  if (n < 2) {
+    return n;
+  }
+  return FibonacchiRecursive(n - 2) + FibonacchiRecursive(n - 1);
+}
+
+console.log(FibonacchiRecursive(15));
+console.log(`we did ${calculations} calculations`);
+
+//Output: 
+610
+we did 1973 calculations
+
+**NOTE:** here we had to perform 1973 calculations just to get the 15th index of fibonacci sequence.
+
+************Fibonnacci using memoization //O(n)
+let calculations2 = 0;
+function FibonacchiMaster() {
+  let cache = {};
+  return function FibonacchiRecursiveMemoization(n) {
+    calculations2++;
+    if (n in cache) {
+      return cache[n];
+    } else if (n < 2) {
+      return n;
+    } else {
+      cache[n] =
+        FibonacchiRecursiveMemoization(n - 2) +
+        FibonacchiRecursiveMemoization(n - 1);
+      return cache[n];
+    }
+  };
+}
+
+const FibonacchiRecursiveMemoization = FibonacchiMaster();
+console.log(FibonacchiRecursiveMemoization(15))
+console.log(`we did ${calculations2} calculations using Memoization`);
+
+// output :
+
+610
+we did 29 calculations using Memoization
+
+**NOTE:** here you can see we just had to perform 29 calculations to get 15th index of Fibonacci series. Whereas without using memoization we had to perform 1973 huge amount of calculations. Now you will have an idea of powers of memoization
+
+
+
+**********************Completed
